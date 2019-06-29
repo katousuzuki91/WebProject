@@ -15,7 +15,6 @@ public class UtilsTest
             s = MD5Util.string2MD5("aaa");
         } catch (NoSuchAlgorithmException e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         System.out.println(s);

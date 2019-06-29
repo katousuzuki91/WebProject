@@ -1,12 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:mvc="http://www.springframework.org/schema/mvc"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
-        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans  
+           http://www.springframework.org/schema/beans/spring-beans.xsd  
+           http://www.springframework.org/schema/aop  
+           http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+           http://www.springframework.org/schema/context  
+           http://www.springframework.org/schema/context/spring-context-4.3.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd
+           http://www.springframework.org/schema/data/mongo
+           http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
+           http://www.springframework.org/schema/data/repository
+           http://www.springframework.org/schema/data/repository/spring-repository-1.5.xsd
+           http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd"
+           >
         <mvc:annotation-driven />
+        
         <!-- 配置自动扫描的包 -->
-        <context:component-scan base-package="cn.com.skynet.web"></context:component-scan>
+        <context:component-scan base-package="cn.com.skynet.web,cn.com.skynet.database"></context:component-scan>
+        
+        <!-- 支持返回json(避免IE在ajax请求时，返回json出现下载 ) -->
+	    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+	        <property name="messageConverters">
+	            <list>
+	                <ref bean="mappingJacksonHttpMessageConverter"/>
+	            </list>
+	        </property>
+	    </bean>
+	    <bean id="mappingJacksonHttpMessageConverter"
+	          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+	        <property name="supportedMediaTypes">
+	            <list>
+	                <value>text/plain;charset=UTF-8</value>
+	                <value>application/json;charset=UTF-8</value>
+	            </list>
+	        </property>
+	    </bean>
+        
+        <!--读取database.properties文件 -->
+        <context:property-placeholder location="classpath:database.properties"/>
+        <mongo:mongo-client id="mongo" host="${mongo.host}" port="${mongo.port}" 
+            credentials="${mongo.username}:${mongo.password}@${mongo.dbname}">
+            <mongo:client-options
+                connections-per-host="${mongo.connectionsPerHost}"
+                threads-allowed-to-block-for-connection-multiplier="${mongo.threadsAllowedToBlockForConnectionMultiplier}"
+                connect-timeout="${mongo.connectTimeout}"
+                max-wait-time="${mongo.maxWaitTime}"
+                socket-keep-alive="${mongo.socketKeepAlive}"
+                socket-timeout="${mongo.socketTimeout}"
+            />
+        </mongo:mongo-client>
+
+        <!-- 设置使用的数据库名-->
+        <mongo:db-factory id="mongoDbFactory" dbname="${mongo.dbname}" mongo-ref="mongo"/>
+
+        <!-- 去掉_class字段配置 -->
+        <bean id="mappingContext"
+            class="org.springframework.data.mongodb.core.mapping.MongoMappingContext" />
+        <bean id="defaultMongoTypeMapper"
+            class="org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper">
+            <constructor-arg name="typeKey"><null /></constructor-arg>
+        </bean>
+
+        <bean id="mappingMongoConverter"
+            class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">
+            <constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+            <constructor-arg name="mappingContext" ref="mappingContext" />
+            <property name="typeMapper" ref="defaultMongoTypeMapper" />
+        </bean>
+        <!-- mongodb的模板 -->
+        <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+            <constructor-arg ref="mongoDbFactory"/>
+            <constructor-arg ref="mappingMongoConverter"/>
+        </bean>
+
+        
+        <!-- Spring dbcp连接池配置，配置数据源 -->
+        <!-- <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+            <property name="driverClassName" value="${jdbc.driverClassName}"/>
+            <property name="url" value="${jdbc.url}"/>
+            <property name="username" value="${jdbc.username}"/>
+            <property name="password" value="${jdbc.password}"/>
+            <property name="initialSize" value="10" />
+            <property name="maxTotal" value="100" />
+            <property name="maxIdle" value="100" />
+            <property name="maxWaitMillis" value="-1" />
+        </bean> -->
+        
+        <!-- 导入Springjdbc -->
+        <!--<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+            <property name="dataSource" ref="dataSource"></property>
+        </bean> -->
 </beans>
