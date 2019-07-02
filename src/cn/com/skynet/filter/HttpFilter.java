@@ -25,7 +25,6 @@ public class HttpFilter implements Filter
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException 
 	{
-	    LOGGER.info("Http filter access");
 	    HttpServletRequest hReq = (HttpServletRequest) request;
 	    HttpServletResponse hRes = (HttpServletResponse) response;
 	    

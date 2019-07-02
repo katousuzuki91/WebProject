@@ -6,7 +6,6 @@ import java.util.List;
 import javax.annotation.Resource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -16,7 +15,9 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import cn.com.skynet.database.entity.Paper;
+import cn.com.skynet.database.entity.User;
 import cn.com.skynet.database.mongodb.dao.MongodbPaperDao;
+import cn.com.skynet.database.mongodb.dao.MongodbUserDao;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:spring-mvc.xml"})
@@ -28,6 +29,9 @@ public class MongodbTest
     
     @Resource
     private MongodbPaperDao dao;
+    
+    @Resource
+    private MongodbUserDao userDao;
     
     @Test
     public void testinsertPaper()
@@ -62,6 +66,15 @@ public class MongodbTest
         {
             System.out.println("id is not exists");
         }
+    }
+    
+    @Test
+    public void testUser()
+    {
+        User findByName = userDao.findByName("aaa");
+        System.out.println(findByName.getId());
+        User user = userDao.findById(findByName.getId());
+        System.out.println(user.getId() + ":" + user.getEmail());
     }
     
     @Test

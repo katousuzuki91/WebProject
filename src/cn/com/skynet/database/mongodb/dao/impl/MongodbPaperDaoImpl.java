@@ -5,7 +5,7 @@ import cn.com.skynet.database.entity.Paper;
 import cn.com.skynet.database.mongodb.AbstractBaseMongoTemplate;
 import cn.com.skynet.database.mongodb.dao.MongodbPaperDao;
 
-@Component("MongodbPaperDaoImpl") 
+@Component("mongodbPaperDao") 
 public class MongodbPaperDaoImpl extends AbstractBaseMongoTemplate implements MongodbPaperDao
 {
     @Override
@@ -23,8 +23,7 @@ public class MongodbPaperDaoImpl extends AbstractBaseMongoTemplate implements Mo
     @Override
     public Paper findById(String id)
     {
-        Paper p = mongoTemplate.findById(id, Paper.class);
-        return p;
+        return mongoTemplate.findById(id, Paper.class);
     }
 
     @Override
