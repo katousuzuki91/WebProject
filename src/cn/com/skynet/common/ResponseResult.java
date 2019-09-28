@@ -12,6 +12,11 @@ public class ResponseResult
         return success(HttpRequestContant.REQUEST_SUCCESS, "success", new JSONObject());
     }
     
+    public static Object success(Object data)
+    {
+        return success(HttpRequestContant.REQUEST_SUCCESS, "success", data);
+    }
+    
     public static Object success(String errorCode, String errorMsg)
     {
         return success(errorCode, errorMsg, new JSONObject());

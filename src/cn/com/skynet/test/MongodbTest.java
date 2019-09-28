@@ -57,10 +57,10 @@ public class MongodbTest
     @Test
     public void testFind()
     {
-        Paper p = mongoTemplate.findById("125166666asdasdfsd", Paper.class);
+        Paper p = mongoTemplate.findById("1564378276644", Paper.class);
         if(null != p)
         {
-            System.out.println(p.getAuthor());
+            System.out.println(p.getContent());
         }
         else
         {

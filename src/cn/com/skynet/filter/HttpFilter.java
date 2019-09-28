@@ -29,7 +29,7 @@ public class HttpFilter implements Filter
 	    HttpServletResponse hRes = (HttpServletResponse) response;
 	    
 	    //deal with the CROS issues
-	    hRes.setHeader("Access-Control-Allow-Origin", "http://localhost:20000");
+	    hRes.setHeader("Access-Control-Allow-Origin", "*");
 		chain.doFilter(hReq, hRes);
 	}
 

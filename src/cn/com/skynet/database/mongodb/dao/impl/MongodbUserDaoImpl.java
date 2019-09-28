@@ -6,6 +6,7 @@ import com.mongodb.BasicDBObject;
 import cn.com.skynet.database.entity.User;
 import cn.com.skynet.database.mongodb.AbstractBaseMongoTemplate;
 import cn.com.skynet.database.mongodb.dao.MongodbUserDao;
+import cn.com.skynet.spring.aop.LogRecoder;
 
 @Component("mongodbUserDao") 
 public class MongodbUserDaoImpl extends AbstractBaseMongoTemplate implements MongodbUserDao
@@ -18,12 +19,14 @@ public class MongodbUserDaoImpl extends AbstractBaseMongoTemplate implements Mon
         
     }
 
+    @LogRecoder
     @Override
     public User findById(String id)
     {
         return mongoTemplate.findById(id, User.class);
     }
 
+    @LogRecoder
     @Override
     public User findByName(String name)
     {

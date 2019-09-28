@@ -76,4 +76,20 @@ public class Paper
     {
         this.lastModifyTime = lastModifyTime;
     }
+    
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.author);
+        sb.append(" post a forum, title is ");
+        sb.append(this.title);
+        sb.append(" at ");
+        sb.append(this.createTime);
+        sb.append(", last modify time is ");
+        sb.append(this.lastModifyTime);
+        sb.append(", content size is ");
+        sb.append(this.content.length());
+        return sb.toString();
+    }
 }

@@ -36,6 +36,14 @@ public class UserController
             return ResponseResult.success(HttpRequestContant.REQUEST_FAIL, "user already exists");
         }
         return ResponseResult.success();
+        /**
+         * 
+         * 熱いお湯
+         * 冷たい水
+         * 浴衣がちょっといい
+         * ちょっぢ待って下さい
+         * 北京から横浜まで飛行機で行きます
+         */
     }
 
 }

@@ -1,5 +1,7 @@
 package cn.com.skynet.database.mongodb.dao;
 
+import java.util.List;
+import java.util.Map;
 import cn.com.skynet.database.entity.Paper;
 
 public interface MongodbPaperDao
@@ -11,4 +13,6 @@ public interface MongodbPaperDao
     void deletePaperById(String id);
     
     void deletePaper(Paper paper);
+    
+    List<Paper> findPapers(Map<String, String> params);
 }
