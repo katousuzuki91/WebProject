@@ -27,6 +27,7 @@ public class FileUploadController
     @RequestMapping(value="/image/upload", method= {RequestMethod.POST})
     public @ResponseBody Object imageUpload2Local(HttpServletRequest request)
     {
+
         MultipartHttpServletRequest mulRequest = (MultipartHttpServletRequest) request;
         List<String> list = fileUploadService.saveFile(mulRequest.getFileMap());
         LOGGER.info(list.toString());
